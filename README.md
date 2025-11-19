@@ -68,8 +68,8 @@ backoffice-turismo/
 **Backend:**
 - Node.js + Express
 - TypeScript
-- JWT para autenticación
-- PostgreSQL/MongoDB
+- Supabase Auth para autenticación
+- PostgreSQL (a través de Supabase)
 
 **Frontend:**
 - React 18

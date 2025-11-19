@@ -9,6 +9,14 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   const { user, logout } = useAuth()
 
+  const handleLogout = async () => {
+    try {
+      await logout()
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error)
+    }
+  }
+
   return (
     <div className="layout">
       <header className="header">
@@ -18,7 +26,7 @@ const Layout = ({ children }: LayoutProps) => {
             <span className="user-info">
               {user?.name || user?.email}
             </span>
-            <button onClick={logout} className="logout-btn">
+            <button onClick={handleLogout} className="logout-btn">
               Cerrar Sesión
             </button>
           </div>

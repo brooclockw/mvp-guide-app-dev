@@ -22,14 +22,25 @@ cd backend
 npm install
 ```
 
-### 3. Configurar Variables de Entorno (Backend)
+### 3. Configurar Variables de Entorno
 
+**Backend:**
 ```bash
-# Copiar el archivo de ejemplo
-cp .env.example .env
+cd backend
+# El archivo .env ya está creado, edítalo con tus credenciales de Supabase
+# Necesitas:
+# - SUPABASE_URL: URL de tu proyecto Supabase
+# - SUPABASE_ANON_KEY: Clave anónima de Supabase
+# - SUPABASE_SERVICE_ROLE_KEY: Clave de servicio de Supabase (para operaciones admin)
+```
 
-# Editar .env con tus configuraciones
-# Al menos cambiar JWT_SECRET y DB_PASSWORD si usas PostgreSQL
+**Frontend:**
+```bash
+cd frontend
+# Crear archivo .env con:
+# VITE_SUPABASE_URL=tu_supabase_url
+# VITE_SUPABASE_ANON_KEY=tu_supabase_anon_key
+# VITE_API_URL=http://localhost:3000/api (opcional)
 ```
 
 ### 4. Instalar Dependencias del Frontend
@@ -57,14 +68,34 @@ npm run dev
 
 El frontend estará disponible en: `http://localhost:5173`
 
-## 🔐 Credenciales de Prueba
+## 🔐 Configuración de Supabase
 
-Para el desarrollo inicial, puedes usar:
+Este proyecto usa **Supabase Auth** para la autenticación. Necesitas:
 
-- **Email:** admin@turismo.com
-- **Password:** admin123
+1. **Crear un proyecto en Supabase:**
+   - Ve a [supabase.com](https://supabase.com)
+   - Crea un nuevo proyecto
+   - Obtén la URL y las claves desde Settings > API
 
-> ⚠️ **Nota:** Estas credenciales son solo para desarrollo. Debes configurar autenticación real con base de datos en producción.
+2. **Configurar variables de entorno:**
+   - Backend: Edita `backend/.env` con tus credenciales
+   - Frontend: Crea `frontend/.env` con `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`
+
+3. **Crear tabla de perfiles (opcional):**
+   ```sql
+   CREATE TABLE profiles (
+     id UUID REFERENCES auth.users(id) PRIMARY KEY,
+     name TEXT,
+     role TEXT DEFAULT 'user',
+     created_at TIMESTAMP DEFAULT NOW()
+   );
+   ```
+
+4. **Crear usuario de prueba:**
+   - Desde el dashboard de Supabase, crea un usuario manualmente
+   - O usa la función de registro si está implementada
+
+> ⚠️ **Nota:** Asegúrate de configurar las políticas RLS (Row Level Security) en Supabase según tus necesidades.
 
 ## 📁 Estructura del Proyecto
 

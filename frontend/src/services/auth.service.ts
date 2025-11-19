@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { supabase } from '../lib/supabase'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 
@@ -9,24 +10,25 @@ const api = axios.create({
   },
 })
 
-// Interceptor para agregar token a las peticiones
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+// Interceptor para agregar token de Supabase a las peticiones
+api.interceptors.request.use(async (config) => {
+  const { data: { session } } = await supabase.auth.getSession()
+  if (session?.access_token) {
+    config.headers.Authorization = `Bearer ${session.access_token}`
   }
   return config
 })
 
 export const authService = {
-  async login(email: string, password: string) {
-    const response = await api.post('/auth/login', { email, password })
-    return response.data.data
-  },
-
+  // Nota: El login ahora se maneja directamente con Supabase en AuthContext
+  // Estos métodos son para compatibilidad o llamadas adicionales al backend
+  
   async logout() {
     try {
-      await api.post('/auth/logout')
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.access_token) {
+        await api.post('/auth/logout')
+      }
     } catch (error) {
       console.error('Error al cerrar sesión:', error)
     }
