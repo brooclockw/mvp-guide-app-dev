@@ -1,15 +1,19 @@
 import { Request, Response } from 'express';
 import { supabaseAdmin } from '../lib/supabase';
 import { AuthRequest } from '../middleware/auth.middleware';
+import { ApiResponse, LoginRequest, LoginResponse, User, UserRole, UserStatus } from '@backoffice-guide/shared';
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request<{}, ApiResponse<LoginResponse>, LoginRequest>, res: Response<ApiResponse<LoginResponse>>) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
-        status: 'error',
-        message: 'Email y contraseña son requeridos'
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Email y contraseña son requeridos'
+        }
       });
     }
 
@@ -21,8 +25,11 @@ export const login = async (req: Request, res: Response) => {
 
     if (error || !data.user) {
       return res.status(401).json({
-        status: 'error',
-        message: error?.message || 'Credenciales inválidas'
+        success: false,
+        error: {
+          code: 'AUTH_ERROR',
+          message: error?.message || 'Credenciales inválidas'
+        }
       });
     }
 
@@ -34,24 +41,33 @@ export const login = async (req: Request, res: Response) => {
       .eq('id', data.user.id)
       .single();
 
-    res.json({
-      status: 'success',
+    const user: User = {
+      id: data.user.id,
+      email: data.user.email || '',
+      role: (profile?.role as UserRole) || UserRole.USUARIO_FINAL,
+      status: UserStatus.ACTIVE,
+      createdAt: data.user.created_at || new Date().toISOString(),
+      updatedAt: data.user.updated_at || new Date().toISOString()
+    };
+
+    const response: ApiResponse<LoginResponse> = {
+      success: true,
       data: {
-        token: data.session?.access_token,
-        refresh_token: data.session?.refresh_token,
-        user: {
-          id: data.user.id,
-          email: data.user.email,
-          role: profile?.role || 'user',
-          name: profile?.name || data.user.email?.split('@')[0] || 'Usuario'
-        }
+        user,
+        token: data.session?.access_token || '',
+        expiresIn: data.session?.expires_in || 3600
       }
-    });
+    };
+
+    res.json(response);
   } catch (error) {
     console.error('Error en login:', error);
     res.status(500).json({
-      status: 'error',
-      message: 'Error al iniciar sesión'
+      success: false,
+      error: {
+        code: 'INTERNAL_ERROR',
+        message: 'Error al iniciar sesión'
+      }
     });
   }
 };
@@ -68,13 +84,13 @@ export const logout = async (req: Request, res: Response) => {
     }
 
     res.json({
-      status: 'success',
+      success: true,
       message: 'Sesión cerrada exitosamente'
     });
   } catch (error) {
     // Aún así respondemos con éxito, ya que el logout del frontend ya se ejecutó
     res.json({
-      status: 'success',
+      success: true,
       message: 'Sesión cerrada exitosamente'
     });
   }
@@ -86,8 +102,11 @@ export const refreshToken = async (req: Request, res: Response) => {
 
     if (!refresh_token) {
       return res.status(400).json({
-        status: 'error',
-        message: 'Refresh token es requerido'
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Refresh token es requerido'
+        }
       });
     }
 
@@ -97,13 +116,16 @@ export const refreshToken = async (req: Request, res: Response) => {
 
     if (error || !data.session) {
       return res.status(401).json({
-        status: 'error',
-        message: error?.message || 'Token de refresco inválido'
+        success: false,
+        error: {
+          code: 'AUTH_ERROR',
+          message: error?.message || 'Token de refresco inválido'
+        }
       });
     }
 
     res.json({
-      status: 'success',
+      success: true,
       data: {
         token: data.session.access_token,
         refresh_token: data.session.refresh_token
@@ -111,8 +133,11 @@ export const refreshToken = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({
-      status: 'error',
-      message: 'Error al refrescar token'
+      success: false,
+      error: {
+        code: 'INTERNAL_ERROR',
+        message: 'Error al refrescar token'
+      }
     });
   }
 };
@@ -121,8 +146,11 @@ export const getMe = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) {
       return res.status(401).json({
-        status: 'error',
-        message: 'No autenticado'
+        success: false,
+        error: {
+          code: 'AUTH_ERROR',
+          message: 'No autenticado'
+        }
       });
     }
 
@@ -131,8 +159,11 @@ export const getMe = async (req: AuthRequest, res: Response) => {
 
     if (userError || !userData.user) {
       return res.status(404).json({
-        status: 'error',
-        message: 'Usuario no encontrado'
+        success: false,
+        error: {
+          code: 'NOT_FOUND',
+          message: 'Usuario no encontrado'
+        }
       });
     }
 
@@ -144,18 +175,16 @@ export const getMe = async (req: AuthRequest, res: Response) => {
       .single();
 
     res.json({
-      status: 'success',
-      data: {
-        id: userData.user.id,
-        email: userData.user.email,
-        role: profile?.role || 'user',
-        name: profile?.name || userData.user.email?.split('@')[0] || 'Usuario'
-      }
+      success: true,
+      data: req.user
     });
   } catch (error) {
     res.status(500).json({
-      status: 'error',
-      message: 'Error al obtener información del usuario'
+      success: false,
+      error: {
+        code: 'INTERNAL_ERROR',
+        message: 'Error al obtener información del usuario'
+      }
     });
   }
 };

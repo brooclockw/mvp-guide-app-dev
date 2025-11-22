@@ -1,4 +1,4 @@
-// Cargar variables de entorno PRIMERO, antes de cualquier importación
+// Cargar variables de entorno PRIMERO, antes de cualquier otra importación
 import dotenv from 'dotenv';
 dotenv.config();
 

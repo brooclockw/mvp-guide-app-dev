@@ -1,16 +1,10 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import supabase from '../lib/supabase'
 import type { User as SupabaseUser, Session, AuthChangeEvent } from '@supabase/supabase-js'
-
-interface User {
-  id: string
-  email: string
-  role: string
-  name?: string
-}
+import { UserProfile, UserRole, UserStatus } from '@backoffice-guide/shared'
 
 interface AuthContextType {
-  user: User | null
+  user: UserProfile | null
   session: Session | null
   login: (email: string, password: string) => Promise<void>
   logout: () => Promise<void>
@@ -33,12 +27,12 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<UserProfile | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   // Función para obtener el perfil del usuario
-  const fetchUserProfile = async (supabaseUser: SupabaseUser): Promise<User | null> => {
+  const fetchUserProfile = async (supabaseUser: SupabaseUser): Promise<UserProfile | null> => {
     try {
       const { data: profile, error } = await supabase
         .from('profiles')
@@ -53,16 +47,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       return {
         id: supabaseUser.id,
         email: supabaseUser.email || '',
-        role: profile?.role || 'user',
-        name: profile?.name || supabaseUser.email?.split('@')[0] || 'Usuario'
+        role: (profile?.role as UserRole) || UserRole.USUARIO_FINAL,
+        status: UserStatus.ACTIVE,
+        createdAt: supabaseUser.created_at || new Date().toISOString(),
+        updatedAt: supabaseUser.updated_at || new Date().toISOString(),
+        firstName: profile?.firstName,
+        lastName: profile?.lastName,
+        phoneNumber: profile?.phoneNumber,
+        avatarUrl: profile?.avatarUrl
       }
     } catch (error) {
       console.error('Error al obtener perfil:', error)
       return {
         id: supabaseUser.id,
         email: supabaseUser.email || '',
-        role: 'user',
-        name: supabaseUser.email?.split('@')[0] || 'Usuario'
+        role: UserRole.USUARIO_FINAL,
+        status: UserStatus.ACTIVE,
+        createdAt: supabaseUser.created_at || new Date().toISOString(),
+        updatedAt: supabaseUser.updated_at || new Date().toISOString()
       }
     }
   }

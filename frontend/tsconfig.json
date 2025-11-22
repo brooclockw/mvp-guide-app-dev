@@ -15,10 +15,12 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+  "baseUrl": ".",
+  "paths": {
+    "@/*": ["src/*"],
+    "@backoffice-guide/shared": ["../shared/src"],
+    "@backoffice-guide/shared/*": ["../shared/src/*"]
+  }
   },
   "include": ["src", "vite-env.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]

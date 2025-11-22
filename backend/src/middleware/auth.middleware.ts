@@ -1,12 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { supabaseAdmin } from '../lib/supabase';
+import { User, UserRole, UserStatus } from '@backoffice-guide/shared';
 
 export interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    email: string;
-    role: string;
-  };
+  user?: User;
 }
 
 export const authenticateToken = async (
@@ -45,7 +42,10 @@ export const authenticateToken = async (
     req.user = {
       id: user.id,
       email: user.email || '',
-      role: profile?.role || 'user'
+      role: (profile?.role as UserRole) || UserRole.USUARIO_FINAL,
+      status: UserStatus.ACTIVE,
+      createdAt: user.created_at || new Date().toISOString(),
+      updatedAt: user.updated_at || new Date().toISOString()
     };
     
     next();
@@ -57,7 +57,7 @@ export const authenticateToken = async (
   }
 };
 
-export const requireRole = (...roles: string[]) => {
+export const requireRole = (...roles: UserRole[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
     if (!req.user) {
       return res.status(401).json({ 
