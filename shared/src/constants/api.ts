@@ -1,3 +1,10 @@
+// Base paths for API routes
+export const API_BASE_PATHS = {
+  AUTH: "/api/auth",
+  DASHBOARD: "/api/dashboard",
+} as const;
+
+// Complete API routes
 export const API_ROUTES = {
   // Auth routes
   AUTH: {

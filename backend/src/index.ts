@@ -4,6 +4,7 @@ dotenv.config();
 
 import express from 'express';
 import cors from 'cors';
+import { API_ROUTES, API_BASE_PATHS } from '@backoffice-guide/shared';
 import { errorHandler } from './middleware/errorHandler';
 import authRoutes from './routes/auth.routes';
 import dashboardRoutes from './routes/dashboard.routes';
@@ -20,12 +21,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.get('/api/health', (req, res) => {
+app.get(API_ROUTES.HEALTH, (req, res) => {
   res.json({ status: 'OK', message: 'Backoffice Turismo API is running' });
 });
 
-app.use('/api/auth', authRoutes);
-app.use('/api/dashboard', dashboardRoutes);
+app.use(API_BASE_PATHS.AUTH, authRoutes);
+app.use(API_BASE_PATHS.DASHBOARD, dashboardRoutes);
 
 // Error handler
 app.use(errorHandler);

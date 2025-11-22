@@ -1,7 +1,8 @@
 import axios from 'axios'
 import supabase from '../lib/supabase'
+import { API_ROUTES } from '@backoffice-guide/shared'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 
 const api = axios.create({
   baseURL: API_URL,
@@ -27,7 +28,7 @@ export const authService = {
     try {
       const { data: { session } } = await supabase.auth.getSession()
       if (session?.access_token) {
-        await api.post('/auth/logout')
+        await api.post(API_ROUTES.AUTH.LOGOUT)
       }
     } catch (error) {
       console.error('Error al cerrar sesión:', error)
@@ -35,7 +36,7 @@ export const authService = {
   },
 
   async getMe() {
-    const response = await api.get('/auth/me')
+    const response = await api.get(API_ROUTES.AUTH.ME)
     return response.data.data
   },
 }
