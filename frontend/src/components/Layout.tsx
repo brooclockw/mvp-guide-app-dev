@@ -24,7 +24,7 @@ const Layout = ({ children }: LayoutProps) => {
           <h1 className="logo">Backoffice Turismo</h1>
           <div className="header-actions">
             <span className="user-info">
-              {user?.name || user?.email}
+              {user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : user?.email}
             </span>
             <button onClick={handleLogout} className="logout-btn">
               Cerrar Sesión
