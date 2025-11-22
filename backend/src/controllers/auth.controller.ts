@@ -62,8 +62,9 @@ export const logout = async (req: Request, res: Response) => {
     const token = authHeader && authHeader.split(' ')[1];
 
     if (token) {
-      // Invalidar sesión en Supabase
-      await supabaseAdmin.auth.signOut(token);
+      // Invalidar la sesión usando el JWT token
+      // La API de administración signOut espera un JWT token como primer parámetro
+      await supabaseAdmin.auth.admin.signOut(token);
     }
 
     res.json({
@@ -71,6 +72,7 @@ export const logout = async (req: Request, res: Response) => {
       message: 'Sesión cerrada exitosamente'
     });
   } catch (error) {
+    // Aún así respondemos con éxito, ya que el logout del frontend ya se ejecutó
     res.json({
       status: 'success',
       message: 'Sesión cerrada exitosamente'

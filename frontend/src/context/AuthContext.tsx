@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { supabase } from '../lib/supabase'
-import type { User as SupabaseUser, Session } from '@supabase/supabase-js'
+import supabase from '../lib/supabase'
+import type { User as SupabaseUser, Session, AuthChangeEvent } from '@supabase/supabase-js'
 
 interface User {
   id: string
@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     // Escuchar cambios en la autenticación
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event: AuthChangeEvent, session: Session | null) => {
       setSession(session)
       if (session?.user) {
         const userProfile = await fetchUserProfile(session.user)
