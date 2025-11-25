@@ -1,4 +1,5 @@
 {
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "target": "ES2020",
     "useDefineForClassFields": true,
@@ -15,12 +16,12 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-  "baseUrl": ".",
-  "paths": {
-    "@/*": ["src/*"],
-    "@backoffice-guide/shared": ["../shared/src"],
-    "@backoffice-guide/shared/*": ["../shared/src/*"]
-  }
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@backoffice-guide/shared": ["../shared/src"],
+      "@backoffice-guide/shared/*": ["../shared/src/*"]
+    }
   },
   "include": ["src", "vite-env.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]

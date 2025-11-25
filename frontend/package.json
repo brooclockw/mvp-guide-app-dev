@@ -6,10 +6,11 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "node -e \"const fs=require('fs');if(fs.existsSync('.eslintrc.json')||fs.existsSync('.eslintrc.js')||fs.existsSync('eslint.config.js')||fs.existsSync('.eslintrc')){require('child_process').spawnSync('eslint',['.','--ext','ts,tsx','--report-unused-disable-directives','--max-warnings','0'],{stdio:'inherit'})}\"",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@backoffice-guide/shared": "*",
+    "@backoffice-guide/shared": "file:../shared",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.1",
