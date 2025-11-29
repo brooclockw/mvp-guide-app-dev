@@ -6,12 +6,14 @@
   "workspaces": [
     "shared",
     "backend",
-    "frontend"
+    "frontend",
+    "mobile"
   ],
   "scripts": {
     "dev": "npm-run-all --parallel dev:backend dev:frontend",
     "dev:backend": "npm run dev --workspace=backend",
     "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:mobile": "npm run start --workspace=mobile",
     "build": "npm run build:shared && npm run build:backend && npm run build:frontend",
     "build:shared": "npm run build --workspace=shared",
     "build:backend": "npm run build --workspace=backend",

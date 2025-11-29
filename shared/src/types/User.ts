@@ -8,6 +8,7 @@ export enum UserStatus {
   ACTIVE = "active",
   INACTIVE = "inactive",
   SUSPENDED = "suspended",
+  UNVERIFIED = "unverified",
 }
 
 export interface User {
@@ -17,6 +18,12 @@ export interface User {
   status: UserStatus;
   createdAt: string;
   updatedAt: string;
+  firstName?: string;
+  lastName?: string;
+  username?: string;
+  dni?: string;
+  gender?: string;
+  birthDate?: string;
 }
 
 export interface UserProfile extends User {

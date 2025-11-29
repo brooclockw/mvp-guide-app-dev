@@ -15,6 +15,9 @@ export const API_ROUTES = {
     ME: "/api/auth/me",
     RESET_PASSWORD: "/api/auth/reset-password",
     CHANGE_PASSWORD: "/api/auth/change-password",
+    VERIFY_OTP: "/api/auth/verify-otp",
+    RESEND_OTP: "/api/auth/resend-otp",
+    RESEND_VERIFICATION: "/api/auth/resend-verification",
   },
   // Dashboard routes
   DASHBOARD: {
