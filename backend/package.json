@@ -7,13 +7,9 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-<<<<<<< HEAD
     "lint": "node -e \"const fs=require('fs');if(fs.existsSync('.eslintrc.json')||fs.existsSync('.eslintrc.js')||fs.existsSync('eslint.config.js')||fs.existsSync('.eslintrc')){require('child_process').spawnSync('eslint',['src','--ext','.ts'],{stdio:'inherit'})}\"",
-    "type-check": "tsc --noEmit"
-=======
-    "lint": "eslint src --ext .ts",
+    "type-check": "tsc --noEmit",
     "clean": "node -e \"require('fs').rmSync('dist', {recursive: true, force: true})\""
->>>>>>> 064403e703ff66bb95a6fc80b576f6ea6cf243bd
   },
   "keywords": ["turismo", "backoffice", "api"],
   "author": "",

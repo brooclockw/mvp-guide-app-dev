@@ -12,11 +12,7 @@
     "dev": "npm-run-all --parallel dev:backend dev:frontend",
     "dev:backend": "npm run dev --workspace=backend",
     "dev:frontend": "npm run dev --workspace=frontend",
-<<<<<<< HEAD
     "build": "npm run build --workspaces",
-=======
-    "build": "npm run build:shared && npm run build:backend && npm run build:frontend",
->>>>>>> 064403e703ff66bb95a6fc80b576f6ea6cf243bd
     "build:shared": "npm run build --workspace=shared",
     "build:backend": "npm run build --workspace=backend",
     "build:frontend": "npm run build --workspace=frontend",

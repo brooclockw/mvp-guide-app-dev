@@ -2,22 +2,12 @@
   "name": "@backoffice-guide/shared",
   "version": "1.0.0",
   "description": "Código compartido entre backend y frontend",
-<<<<<<< HEAD
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-=======
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
->>>>>>> 064403e703ff66bb95a6fc80b576f6ea6cf243bd
   "scripts": {
-    "build": "tsc",
     "type-check": "tsc --noEmit",
-<<<<<<< HEAD
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist"
-=======
     "clean": "node -e \"require('fs').rmSync('dist', {recursive: true, force: true})\""
->>>>>>> 064403e703ff66bb95a6fc80b576f6ea6cf243bd
   },
   "keywords": [],
   "author": "",
