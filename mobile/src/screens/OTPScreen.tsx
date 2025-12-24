@@ -8,7 +8,7 @@ import {
   Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
-  Platform,
+  Platform
 } from 'react-native';
 import { authService } from '../services/auth.service';
 import type { VerifyOTPRequest, ResendOTPRequest } from '@backoffice-guide/shared';
